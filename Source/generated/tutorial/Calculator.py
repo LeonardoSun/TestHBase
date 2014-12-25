@@ -7,23 +7,23 @@
 #
 
 from thrift.Thrift import TType, TMessageType, TException, TApplicationException
-from shared.SharedService import *
 from ttypes import *
 from thrift.Thrift import TProcessor
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol, TProtocol
+from Source.generated.shared import SharedService
 try:
   from thrift.protocol import fastbinary
 except:
   fastbinary = None
 
 
-class Iface(shared.SharedService.Iface):
+class Iface(SharedService.Iface):
   """
   Ahh, now onto the cool part, defining a service. Services just need a name
   and can optionally inherit from another service using the extends keyword.
   """
-  def ping(self, ):
+  def ping(self,):
     """
     A method definition looks like C code. It has a return type, arguments,
     and optionally a list of exceptions that it may throw. Note that argument
@@ -48,7 +48,7 @@ class Iface(shared.SharedService.Iface):
     """
     pass
 
-  def zip(self, ):
+  def zip(self,):
     """
     This method has a oneway modifier. That means the client only makes
     a request and does not listen for any response at all. Oneway methods
@@ -57,15 +57,15 @@ class Iface(shared.SharedService.Iface):
     pass
 
 
-class Client(shared.SharedService.Client, Iface):
+class Client(SharedService.Client, Iface):
   """
   Ahh, now onto the cool part, defining a service. Services just need a name
   and can optionally inherit from another service using the extends keyword.
   """
   def __init__(self, iprot, oprot=None):
-    shared.SharedService.Client.__init__(self, iprot, oprot)
+    SharedService.Client.__init__(self, iprot, oprot)
 
-  def ping(self, ):
+  def ping(self,):
     """
     A method definition looks like C code. It has a return type, arguments,
     and optionally a list of exceptions that it may throw. Note that argument
@@ -75,14 +75,14 @@ class Client(shared.SharedService.Client, Iface):
     self.send_ping()
     self.recv_ping()
 
-  def send_ping(self, ):
+  def send_ping(self,):
     self._oprot.writeMessageBegin('ping', TMessageType.CALL, self._seqid)
     args = ping_args()
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_ping(self, ):
+  def recv_ping(self,):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
@@ -112,7 +112,7 @@ class Client(shared.SharedService.Client, Iface):
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_add(self, ):
+  def recv_add(self,):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
@@ -144,7 +144,7 @@ class Client(shared.SharedService.Client, Iface):
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-  def recv_calculate(self, ):
+  def recv_calculate(self,):
     (fname, mtype, rseqid) = self._iprot.readMessageBegin()
     if mtype == TMessageType.EXCEPTION:
       x = TApplicationException()
@@ -160,7 +160,7 @@ class Client(shared.SharedService.Client, Iface):
       raise result.ouch
     raise TApplicationException(TApplicationException.MISSING_RESULT, "calculate failed: unknown result");
 
-  def zip(self, ):
+  def zip(self,):
     """
     This method has a oneway modifier. That means the client only makes
     a request and does not listen for any response at all. Oneway methods
@@ -168,16 +168,16 @@ class Client(shared.SharedService.Client, Iface):
     """
     self.send_zip()
 
-  def send_zip(self, ):
+  def send_zip(self,):
     self._oprot.writeMessageBegin('zip', TMessageType.CALL, self._seqid)
     args = zip_args()
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
 
-class Processor(shared.SharedService.Processor, Iface, TProcessor):
+class Processor(SharedService.Processor, Iface, TProcessor):
   def __init__(self, handler):
-    shared.SharedService.Processor.__init__(self, handler)
+    SharedService.Processor.__init__(self, handler)
     self._processMap["ping"] = Processor.process_ping
     self._processMap["add"] = Processor.process_add
     self._processMap["calculate"] = Processor.process_calculate
@@ -336,9 +336,9 @@ class add_args:
   """
 
   thrift_spec = (
-    None, # 0
-    (1, TType.I32, 'num1', None, None, ), # 1
-    (2, TType.I32, 'num2', None, None, ), # 2
+    None,  # 0
+    (1, TType.I32, 'num1', None, None,),  # 1
+    (2, TType.I32, 'num2', None, None,),  # 2
   )
 
   def __init__(self, num1=None, num2=None,):
@@ -407,7 +407,7 @@ class add_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
+    (0, TType.I32, 'success', None, None,),  # 0
   )
 
   def __init__(self, success=None,):
@@ -467,9 +467,9 @@ class calculate_args:
   """
 
   thrift_spec = (
-    None, # 0
-    (1, TType.I32, 'logid', None, None, ), # 1
-    (2, TType.STRUCT, 'w', (Work, Work.thrift_spec), None, ), # 2
+    None,  # 0
+    (1, TType.I32, 'logid', None, None,),  # 1
+    (2, TType.STRUCT, 'w', (Work, Work.thrift_spec), None,),  # 2
   )
 
   def __init__(self, logid=None, w=None,):
@@ -540,8 +540,8 @@ class calculate_result:
   """
 
   thrift_spec = (
-    (0, TType.I32, 'success', None, None, ), # 0
-    (1, TType.STRUCT, 'ouch', (InvalidOperation, InvalidOperation.thrift_spec), None, ), # 1
+    (0, TType.I32, 'success', None, None,),  # 0
+    (1, TType.STRUCT, 'ouch', (InvalidOperation, InvalidOperation.thrift_spec), None,),  # 1
   )
 
   def __init__(self, success=None, ouch=None,):
